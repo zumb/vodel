@@ -8,6 +8,6 @@ interface JsonAdapter
 
   public function validate(\stdClass $jsonObject):bool;
 
-  public function fill(\stdClass $jsonObject):void;
+  public function fillWith(\stdClass $jsonObject):void;
 
 }

@@ -1,10 +1,9 @@
 <?hh //strict
 namespace Vodel\Interfaces;
 
-interface TypeChecker
+interface Validator
 {
-  public function getType():string;
-
   public function check(mixed $value):bool;
 
+  public function getErrorMessage():string;
 }

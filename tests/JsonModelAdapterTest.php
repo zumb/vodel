@@ -1,5 +1,5 @@
 <?hh //decl
-namespace Tests;
+namespace Vodel\Tests;
 
 use Vodel\Interfaces\JsonModel;
 use Vodel\JsonModelAdapter;
