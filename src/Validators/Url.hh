@@ -5,11 +5,8 @@ use Vodel\Interfaces\Validator;
 
 class Url extends FilterVar
 {
-  public static int $FLAG = FILTER_VALIDATE_URL;
-
-  public function getTarget():string
-  {
-    return 'Vodel\Url';
+  public function __construct() {
+    parent::__construct(FILTER_VALIDATE_URL);
   }
 
   public function getErrorMessage():string

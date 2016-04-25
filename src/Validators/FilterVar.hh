@@ -3,21 +3,19 @@ namespace Vodel\Validators;
 
 use Vodel\Interfaces\Validator;
 
-abstract class FilterVar implements Validator
+class FilterVar implements Validator
 {
-  public static int $FLAG = 0;
+  public function __construct(
+    protected int $flag,
+    protected mixed $options = null
+  ) {}
 
-  public function check(mixed $value):bool
+  public function validate(mixed $value):bool
   {
-    if(is_string($value)) {
-      return filter_var($value, static::$FLAG) !== false;
+    if(is_string($value)){
+      return filter_var($value, $this->flag, $this->options) !== false;
     }
     return false;
-  }
-
-  public function getErrorMessage():string
-  {
-    return "Value does not match";
   }
 
 }

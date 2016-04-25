@@ -1,7 +1,8 @@
 {
     "name": "zumb/vodel",
     "require-dev": {
-        "phpunit/phpunit": "~5.0"
+        "phpspec/phpspec": "^2.5",
+        "phpspec/prophecy": "^1.6"
     },
     "autoload": {
         "psr-4": {

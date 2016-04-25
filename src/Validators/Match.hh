@@ -3,27 +3,24 @@ namespace Vodel\Validators;
 
 use Vodel\Interfaces\Validator;
 
-class Match<T> implements Validator
+class Match implements Validator
 {
   public function __construct(
-    protected classname<T> $enum
+    protected \ReflectionClass $enum
   ) {}
 
-  public function check(mixed $value):bool
+  public function validate(mixed $value):bool
   {
-    $assert = new \ReflectionMethod($this->enum, "assert");
-    try {
-      $assert->invoke(null, $value);
-      return true;
-    } catch (\UnexpectedValueException $ex) {
-      return false;
+    if(is_string($value)) {
+      $assert = $this->enum->getMethod("assert");
+      try {
+        $assert->invoke(null, $value);
+        return true;
+      } catch (\UnexpectedValueException $ex) {
+        return false;
+      }
     }
-  }
-
-  public function getErrorMessage():string
-  {
-    $getNames = new \ReflectionMethod($this->enum, "getValues");
-    return "Value must be one of: ".implode(", ", $getNames->invoke(null));
+    return false;
   }
 
 }

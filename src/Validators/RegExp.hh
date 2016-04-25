@@ -3,21 +3,23 @@ namespace Vodel\Validators;
 
 use Vodel\Interfaces\Validator;
 
-abstract class RegExp implements Validator
+class RegExp implements Validator
 {
-  public static string $PATTERN = "";
+  public function __construct(
+    public string $expression
+  ){}
 
-  public function check(mixed $value):bool
+  public function validate(mixed $value):bool
   {
     if(is_string($value)) {
-      return preg_match(static::$PATTERN, $value) == 1;
+      return preg_match($this->expression, $value) == 1;
     }
     return false;
   }
 
   public function getErrorMessage():string
   {
-    return "Value is does not match: ".static::$PATTERN;
+    return "Value does not match the expression: ".$this->expression;
   }
 
 }

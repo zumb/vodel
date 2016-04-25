@@ -32,7 +32,7 @@ class UserModel implements JsonModel
   /* Attributes will be required unless you make them nullables */
   public ?string $lastName;
 
-  /* Using an enum to validate values */
+  /* Using the enum to validate values */
   public Role $role = Role::USER;
 
   /* Use your custom type, also in arrays (you could have used also an enum) */
@@ -63,7 +63,10 @@ class Phone implements JsonModel
   public string $number = '';
 }
 
-/* Custom Validator for our previously defined Role type */
+/* Custom Validator for our previously defined Role type
+ * in this case extends InArray validator, but you can make
+ * your own using the Validator interface
+*/
 class ColorValidator extends Validators\InArray<string>
 {
   protected array<string> $values = ["orange", "blue", "green"];
@@ -73,13 +76,7 @@ class ColorValidator extends Validators\InArray<string>
  * your objects
  */
 function main ():void {
-  /* Create the adapter and add any custom validation */
-  $adapter = new \Vodel\JsonModelAdapter(new UserModel());
-  $adapter->addValidator("MyProject\Role", new ColorValidator());
-  $jsonInput = json_decode("{}");
-  /* Take your JSON and send it for validation */
-  if($adapter->validate($jsonInput)) {
-    /* Fill your model */
-    $adapter->fillWith($jsonInput);
-  }
+
+
+
 }

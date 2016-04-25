@@ -3,66 +3,28 @@ namespace Vodel;
 
 use Vodel\Interfaces\JsonModel;
 use Vodel\Interfaces\Validator;
+use Vodel\ValidationCollection;
 
-class JsonModelAdapter extends \ReflectionClass implements Interfaces\JsonAdapter
+class JsonModelAdapter implements Validator
 {
-  protected Vector<string> $errors = Vector{};
+  public function __construct(
+    protected PropertyAdapterFactory $factory,
+    public \ReflectionClass $model
+  ) {}
 
-  protected Map<string, Validator> $validators = Map{};
-
-  public function addValidator(string $target, Validator $typeValidator):this
+  public function validate(mixed $jsonObject):bool
   {
-    $this->validators->add(Pair{$target, $typeValidator});
-    return $this;
-  }
-
-  public function getErrors():Vector<string>
-  {
-    return $this->errors;
-  }
-
-  public function validate(\stdClass $object):bool
-  {
-    $this->errors->clear();
-    $reflection = new \ReflectionClass($object);
-    foreach($this->getProperties(\ReflectionProperty::IS_PUBLIC) as $property) {
-      $this->validateProperty($property, $reflection);
-    }
-    return $this->errors->count() == 0;
-  }
-
-  public function validateProperty(\ReflectionProperty $property, \ReflectionClass $jsonObject):void
-  {
-    if(!$jsonObject->hasProperty($property->getName()) && $property->isDefault()) {
-      $this->errors[] = "Missing property";
-    } else {
-      $jsonProperty = $jsonObject->getProperty($property->getName());
-      /*if(!$this->checkType($property->getTypeText(), $jsonProperty->getValue($object))) {
-        $this->errors[] = "Wrong type";
-      }*/
-    }
-  }
-
-  public function checkType(string $type, mixed $value):bool
-  {
-    var_dump(is_a($value, $type));
-    switch($type) {
-      case 'HH\string':
-        return is_string($value);
-      default:
-        $adapter = new JsonModelAdapter($type);
-        if($value instanceof \stdClass && $adapter->implementsInterface(JsonModel::class)) {
-          $this->errors->addAll($adapter->getErrors());
-          return $adapter->validate($value);
+    if($jsonObject instanceof \stdClass) {
+      $jsonObject = new \ReflectionClass($jsonObject);
+      foreach($this->model->getProperties(\ReflectionProperty::IS_PUBLIC) as $property) {
+        $adapter = $this->factory->make($property);
+        if(!$adapter->validate($jsonObject->getProperty($property->getName()))) {
+            return false;
         }
+      }
+      return true;
     }
     return false;
   }
-
-  public function fillWith(\stdClass $jsonObject):void
-  {
-
-  }
-
 
 }

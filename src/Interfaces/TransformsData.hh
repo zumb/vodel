@@ -1,7 +1,7 @@
 <?hh //strict
 namespace Vodel\Interfaces;
 
-interface TransformsData<T>
+interface TransformsData<Tf, Tt>
 {
-  public function transform(mixed $value):?T;
+  public function transform(Tf $value):?Tt;
 }
