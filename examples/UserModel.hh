@@ -1,8 +1,10 @@
-<?hh //strict
+<?hh //partial
 namespace MyProject;
 
 use Vodel\Interfaces\JsonModel;
 use Vodel\Validators;
+
+require_once 'vendor/autoload.php';
 
 /* Vodel relies on type hints for matching validation rules,
  * you can define custom types to apply custom validation rules
@@ -17,35 +19,43 @@ enum Role: string {
   ADMIN = "admin";
 }
 
-/* Implement JsonModel */
+/* Implement JsonModel on your model definitions */
 class UserModel implements JsonModel
 {
-  /* Vodel also includes some common types you can use, like Email */
-  public \Vodel\Email $email = '';
+  /* Here we set the properties in the constructor, so they will need to
+   be defined */
+  public function __construct(
+    /* Vodel also includes some common types you can use, like Email */
+    public \Vodel\Email $email,
 
-  /* Or Url */
-  public \Vodel\Url $website = '';
+    /* Or Url */
+    public \Vodel\Url $website,
 
-  /* String also will be validated, number only will fail */
-  public string $name = '';
+    /* Here we use our custom type Color, that is a string, but inside an array
+    that means that the user can send an array of values, and each of them
+    will have to pass the validation associated with the Color type */
+    public Vector<Color> $favoriteColors,
 
-  /* Attributes will be required unless you make them nullables */
-  public ?string $lastName;
+    /* As simple validation will check for the scalar type */
+    public string $name,
 
-  /* Using the enum to validate values */
-  public Role $role = Role::USER;
+    /* To define an optional value, just make it nullable */
+    public ?string $lastName,
 
-  /* Use your custom type, also in arrays (you could have used also an enum) */
-  public array<Color> $favoriteColors = [];
+    /* Here we use our enum type, the user will have to send a valid value */
+    public Role $role,
 
-  /* Relate another JsonModel object as property or array, it will
-  * get validated and the whole validation will fail if there is any
-  * validation error
-  */
-  public array<Phone> $phones = [];
+    public \DateTime $birthDate,
 
-  /* Protected properties don't count */
-  protected ?string $description;
+    /* Relate another JsonModel object as property or vector, it will
+    * get validated and the whole validation will fail if there is any
+    * validation error
+    */
+    public Vector<PhoneModel> $phones,
+
+    /* Protected properties don't count */
+    protected ?string $description
+  ) {}
 
   /* Unless you write a setter method for them */
   public function setDescription(string $value):void
@@ -55,28 +65,44 @@ class UserModel implements JsonModel
 
 }
 
-/* Another model structure to save data */
-class Phone implements JsonModel
+/* This is our PhoneModel that we used previously */
+class PhoneModel implements JsonModel
 {
-  public string $type = '';
+  public function __construct(
+    public string $type,
 
-  public string $number = '';
+  // Check for a numeric input
+    public int $number
+  ) {}
 }
 
-/* Custom Validator for our previously defined Role type
+/* Custom Validator for our previously defined Color type
  * in this case extends InArray validator, but you can make
- * your own using the Validator interface
+ * your own complex logic implementing the Validator interface
 */
 class ColorValidator extends Validators\InArray<string>
 {
-  protected array<string> $values = ["orange", "blue", "green"];
+  public function __construct() {
+    parent::__construct(["orange", "blue", "green"]);
+  }
 }
 
-/* And now just receive the data, get it validated, and fill
- * your objects
+/* And now just receive the data, and get it validated
  */
 function main ():void {
-
-
-
+  // Create the validation repository
+  $validations = new \Vodel\ValidationRepository(new \Vodel\PropertyInspector());
+  // Add custom validations
+  $validations->addValidator('MyProject\Color', new ColorValidator());
+  $validator = new \Vodel\Validators\Model(
+    new \Vodel\JsonModelAdapter($validations, new \ReflectionClass(UserModel::class))
+  );
+  // We will take the input from a file, it should come from the request
+  if($validator->validate(json_decode(file_get_contents(__DIR__."/example.json")))) {
+    echo "The input is valid";
+  } else {
+    var_dump($validator->getFailures());
+  }
 }
+
+main();

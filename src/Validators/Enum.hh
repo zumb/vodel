@@ -3,7 +3,7 @@ namespace Vodel\Validators;
 
 use Vodel\Interfaces\Validator;
 
-class Match implements Validator
+class Enum implements Validator
 {
   public function __construct(
     protected \ReflectionClass $enum
@@ -23,4 +23,8 @@ class Match implements Validator
     return false;
   }
 
+  public function getFailures():Vector<string>
+  {
+    return Vector{"Value is not allowed"};
+  }
 }

@@ -1,0 +1,18 @@
+{
+  "email": "some@user.com",
+  "website": "http://web.com",
+  "favoriteColors": ["blue", "green"],
+  "name": "Ken",
+  "birthDate": "333",
+  "role": "editor",
+  "phones": [
+      {
+        "type": "home",
+        "number": 123456
+      },
+      {
+        "type": "office",
+        "number": 12345678
+      }
+    ]
+}

@@ -19,6 +19,8 @@ class ArrayValidatorSpec extends ObjectBehavior
     $validator->validate(Argument::any())
       ->shouldBeCalledTimes(1)
       ->willReturn(false);
+    $validator->getFailures()
+      ->willReturn(new \HH\Vector());
     $this->validate(["one", "two"])
       ->shouldReturn(false);
   }

@@ -8,9 +8,8 @@ use Vodel\Interfaces\Validator;
 
 class PropertyAdapterSpec extends ObjectBehavior
 {
-  function let($property, $inputProperty)
+  function let($property)
   {
-    $inputProperty->beADoubleOf(\ReflectionProperty::class);
     $property->beADoubleOf(\ReflectionProperty::class);
     $this->beConstructedWith($property);
   }
@@ -19,17 +18,17 @@ class PropertyAdapterSpec extends ObjectBehavior
   {
     $property->getTypeText()
       ->willReturn('HH\string');
-    $this->isRequired()->shouldBe(true);
+    $this->isOptional()->shouldBe(false);
   }
 
   function it_detects_optional_property($property)
   {
     $property->getTypeText()
       ->willReturn('?HH\string');
-    $this->isRequired()->shouldBe(false);
+    $this->isOptional()->shouldBe(true);
   }
 
-  function it_checks_null_input($property)
+/*  function it_checks_null_input($property)
   {
     $property->getTypeText()
       ->willReturn('?HH\string');
@@ -41,25 +40,23 @@ class PropertyAdapterSpec extends ObjectBehavior
       ->shouldBe(false);
   }
 
-  function it_checks_input_without_validator($inputProperty)
+  function it_checks_input_without_validator()
   {
-    $this->validate($inputProperty)
+    $this->validate("value")
       ->shouldBe(true);
   }
 
-  function it_checks_input_with_validator($property, $inputProperty, $validator)
+  function it_checks_input_with_validator($property, $validator)
   {
     $validator->beADoubleOf(Validator::class);
     $this->beConstructedWith($property, $validator);
-    $inputProperty->getValue()
-      ->willReturn("value");
     $validator->validate("value")
       ->willReturn(true);
-    $this->validate($inputProperty)
+    $this->validate("value")
       ->shouldBe(true);
     $validator->validate("value")
       ->willReturn(false);
-    $this->validate($inputProperty)
+    $this->validate("value")
       ->shouldBe(false);
-  }
+  } */
 }

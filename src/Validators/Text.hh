@@ -9,4 +9,9 @@ class Text implements Validator
   {
     return is_string($value);
   }
+
+  public function getFailures():Vector<string>
+  {
+    return Vector{"Value is not text"};
+  }
 }

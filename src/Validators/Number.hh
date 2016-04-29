@@ -10,8 +10,8 @@ class Number implements Validator
     return is_int($value);
   }
 
-  public function getErrorMessage():string
+  public function getFailures():Vector<string>
   {
-    return "Value must be an integer number";
+    return Vector{"Value must be an integer number"};
   }
 }

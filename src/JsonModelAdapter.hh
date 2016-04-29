@@ -4,27 +4,53 @@ namespace Vodel;
 use Vodel\Interfaces\JsonModel;
 use Vodel\Interfaces\Validator;
 use Vodel\ValidationCollection;
+use Vodel\Validators\ComplexValidatorAbstract;
+use Vodel\PropertyInspector;
 
-class JsonModelAdapter implements Validator
+class JsonModelAdapter
 {
   public function __construct(
-    protected PropertyAdapterFactory $factory,
+    protected ValidationRepository $validationRepository,
     public \ReflectionClass $model
   ) {}
 
-  public function validate(mixed $jsonObject):bool
+  public function getProperties():array<PropertyAdapter>
   {
-    if($jsonObject instanceof \stdClass) {
-      $jsonObject = new \ReflectionClass($jsonObject);
-      foreach($this->model->getProperties(\ReflectionProperty::IS_PUBLIC) as $property) {
-        $adapter = $this->factory->make($property);
-        if(!$adapter->validate($jsonObject->getProperty($property->getName()))) {
-            return false;
-        }
-      }
-      return true;
+    $properties = [];
+    foreach($this->model->getProperties(\ReflectionProperty::IS_PUBLIC) as $property) {
+      $properties[] = $this->getAdapter($property);
     }
-    return false;
+    return $properties;
+  }
+
+  public function getPropertiesFromMethods():array<PropertyAdapter>
+  {
+    $properties = [];
+    foreach($this->model->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
+      if(strpos($method->getName(), 'set') === 0) {
+        $parameter = $method->getParameters()[0];
+        $properties[] = new PropertyAdapter(
+          str_replace('set', '', $method->getName()),
+          $parameter->getTypeText(),
+          $this->validationRepository->getValidatorFor($parameter->getTypeText())
+        );
+      }
+    }
+    return $properties;
+  }
+
+  public function getPropertiesToValidate():array<PropertyAdapter>
+  {
+    return array_merge($this->getProperties(), $this->getPropertiesFromMethods());
+  }
+
+  public function getAdapter(\ReflectionProperty $property):PropertyAdapter
+  {
+    return new PropertyAdapter(
+      $property->getName(),
+      $property->getTypeText(),
+      $this->validationRepository->getValidatorFor($property->getTypeText())
+    );
   }
 
 }

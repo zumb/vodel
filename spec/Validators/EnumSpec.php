@@ -10,7 +10,7 @@ enum Color:string {
   WHITE = "white";
 }
 
-class MatchSpec extends ObjectBehavior
+class EnumSpec extends ObjectBehavior
 {
   public function let()
   {

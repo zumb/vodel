@@ -9,4 +9,8 @@ class Email extends FilterVar
     parent::__construct(FILTER_VALIDATE_EMAIL);
   }
 
+  public function getFailures():Vector<string>
+  {
+    return Vector{"Invalid email"};
+  }
 }

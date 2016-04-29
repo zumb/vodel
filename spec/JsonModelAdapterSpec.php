@@ -4,18 +4,18 @@ namespace spec\Vodel;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
-use Vodel\PropertyAdapterFactory;
+use Vodel\ValidationRepository;
 use Vodel\PropertyAdapter;
 
 class JsonModelAdapterSpec extends ObjectBehavior
 {
-  function let($factory, $model, $property, $adapter)
+  function let($validations, $model, $property, $adapter)
   {
-      $factory->beADoubleOf(PropertyAdapterFactory::class);
+      $validations->beADoubleOf(ValidationRepository::class);
       $model->beADoubleOf(\ReflectionClass::class);
       $property->beADoubleOf(\ReflectionProperty::class);
       $adapter->beADoubleOf(PropertyAdapter::class);
-      $this->beConstructedWith($factory, $model);
+      $this->beConstructedWith($validations, $model);
   }
 
   function it_checks_input_is_object()
@@ -58,5 +58,5 @@ class JsonModelAdapterSpec extends ObjectBehavior
     $input->last_name = "second test";
     $this->validate($input)
       ->shouldBe(false);
-  }
+  }*/
 }
