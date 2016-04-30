@@ -2,7 +2,8 @@
     "name": "zumb/vodel",
     "require-dev": {
         "phpspec/phpspec": "^2.5",
-        "phpspec/prophecy": "^1.6"
+        "phpspec/prophecy": "^1.6",
+        "henrikbjorn/phpspec-code-coverage": "^2.0"
     },
     "autoload": {
         "psr-4": {
