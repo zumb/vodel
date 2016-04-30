@@ -101,7 +101,7 @@ function main ():void {
   if($validator->validate(json_decode(file_get_contents(__DIR__."/example.json")))) {
     echo "The input is valid";
   } else {
-    var_dump($validator->getFailures());
+    var_dump(json_encode($validator->getFailures()));
   }
 }
 

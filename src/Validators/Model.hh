@@ -10,7 +10,7 @@ use Vodel\JsonModelAdapter;
 
 class Model extends ComplexValidatorAbstract implements Validator
 {
-  protected Vector<string> $failures = Vector{};
+  protected Map<string, mixed> $failures = Map{};
 
   public function __construct(
     public JsonModelAdapter $model
@@ -23,18 +23,15 @@ class Model extends ComplexValidatorAbstract implements Validator
       foreach($this->model->getPropertiesToValidate() as $property) {
         $property->setValue($jsonReflection, $jsonObject);
         if(!$property->validate()) {
-          $this->failures->add($property->getName());
-          $this->failures->addAll($property->getFailures());
-          return false;
+          $this->failures->add(Pair{$property->getName(), $property->getFailure()});
         }
       }
-      return true;
     }
-    return false;
+    return $this->failures->count() == 0;
   }
 
-  public function getFailures():Vector<string>
+  public function getErrorMessage():string
   {
-    return $this->failures;
+    return "Invalid object";
   }
 }

@@ -1,14 +1,24 @@
 <?hh //strict
 namespace Vodel\Validators;
 
+use Vodel\Interfaces\ComplexValidator;
 use Vodel\Interfaces\Validator;
 
-abstract class ComplexValidatorAbstract implements Validator
+abstract class ComplexValidatorAbstract implements ComplexValidator
 {
-  protected Vector<string> $failures = Vector {};
+  protected Map<string, mixed> $failures = Map {};
 
-  public function getFailures():Vector<string>
+  public function getFailures():Map<string, mixed>
   {
     return $this->failures;
+  }
+
+  public function addFailMessage(string $name, Validator $validator):void
+  {
+    if($validator instanceof ComplexValidator) {
+      $this->failures->add(Pair{$name, $validator->getFailures()});
+    } else {
+      $this->failures->add(Pair{$name, $validator->getErrorMessage()});
+    }
   }
 }

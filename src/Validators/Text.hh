@@ -10,8 +10,8 @@ class Text implements Validator
     return is_string($value);
   }
 
-  public function getFailures():Vector<string>
+  public function getErrorMessage():string
   {
-    return Vector{"Value is not text"};
+    return "Value is not text";
   }
 }

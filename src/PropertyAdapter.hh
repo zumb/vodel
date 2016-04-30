@@ -2,8 +2,8 @@
 namespace Vodel;
 
 use Vodel\Interfaces\Validator;
-use Vodel\Validators\ComplexValidatorAbstract;
 use Vodel\Interfaces\TransformsData;
+use Vodel\Interfaces\ComplexValidator;
 
 class PropertyAdapter
 {
@@ -27,21 +27,10 @@ class PropertyAdapter
 
   public function validate():bool
   {
-    if($this->value == null && !$this->isOptional()) {
-      $this->failures->add("Required");
-      return false;
-    }elseif($this->value) {
-      if($this->validator instanceof TransformsData) {
-        $this->value = $this->validator->transform($this->value);
-      }
-      if($this->validator !== null) {
-        $result = $this->validator->validate($this->value);
-        if(!$result && $this->validator != null) {
-          $failures = $this->validator->getFailures();
-          $this->failures->addAll($failures);
-          return false;
-        }
-      }
+    if($this->value == null) {
+      return $this->isOptional();
+    }elseif($this->validator !== null) {
+      return $this->validator->validate($this->value);
     }
     return true;
   }
@@ -51,9 +40,15 @@ class PropertyAdapter
     return strpos($this->type, '?') === 0;
   }
 
-  public function getFailures():Vector<string>
+  public function getFailure():mixed
   {
-    return $this->failures;
+    if($this->value == null && !$this->isOptional()) {
+      return "Required";
+    } elseif($this->validator instanceof ComplexValidator) {
+      return $this->validator->getFailures();
+    } elseif($this->validator) {
+      return $this->validator->getErrorMessage();
+    }
   }
 
   public function getName():string

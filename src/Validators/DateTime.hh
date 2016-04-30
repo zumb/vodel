@@ -10,7 +10,10 @@ class DateTime implements Validator, TransformsData<string, \DateTime>
 
   public function validate(mixed $value):bool
   {
-    return $value instanceof \DateTime;
+    if(is_string($value)) {
+      return $this->transform($value) instanceof \DateTime;
+    }
+    return false;
   }
 
   public function transform(string $value):?\DateTime
@@ -18,8 +21,8 @@ class DateTime implements Validator, TransformsData<string, \DateTime>
     return \DateTime::createFromFormat(self::$FORMAT, $value) ?: null;
   }
 
-  public function getFailures():Vector<string>
+  public function getErrorMessage():string
   {
-    return Vector{"Invalid date"};
+    return "Should be a valid date, using format ".self::$FORMAT;
   }
 }

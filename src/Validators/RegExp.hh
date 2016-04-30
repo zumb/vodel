@@ -17,9 +17,9 @@ class RegExp implements Validator
     return false;
   }
 
-  public function getFailures():Vector<string>
+  public function getErrorMessage():string
   {
-    return Vector{"Value does not match the expression: ".$this->expression};
+    return "Value does not match the expression: ".$this->expression;
   }
 
 }

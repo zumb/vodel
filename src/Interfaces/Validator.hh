@@ -5,5 +5,5 @@ interface Validator
 {
   public function validate(mixed $value):bool;
 
-  public function getFailures():Vector<string>;
+  public function getErrorMessage():string;
 }

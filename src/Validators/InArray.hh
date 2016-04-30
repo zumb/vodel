@@ -14,8 +14,8 @@ class InArray<T> implements Validator
     return in_array($value, $this->values, true);
   }
 
-  public function getFailures():Vector<string>
+  public function getErrorMessage():string
   {
-    return Vector{"Value is not allowed"};
+    return "Value should be one of these: ".implode(",", $this->values);
   }
 }

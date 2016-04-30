@@ -9,9 +9,9 @@ class Url extends FilterVar
     parent::__construct(FILTER_VALIDATE_URL);
   }
 
-  public function getFailures():Vector<string>
+  public function getErrorMessage():string
   {
-    return Vector{"Value is not a valid URL address"};
+    return "Value is not a valid URL address";
   }
 
 }

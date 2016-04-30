@@ -3,7 +3,7 @@ namespace Vodel\Validators;
 
 use Vodel\Interfaces\Validator;
 
-class ArrayValidator extends ComplexValidatorAbstract
+class ArrayValidator extends ComplexValidatorAbstract implements Validator
 {
   public function __construct(
     protected Validator $validator
@@ -12,9 +12,9 @@ class ArrayValidator extends ComplexValidatorAbstract
   public function validate(mixed $array):bool
   {
     if(is_array($array)) {
-      foreach($array as $value) {
+      foreach($array as $index => $value) {
         if(!$this->validator->validate($value)) {
-          $this->failures->addAll($this->validator->getFailures());
+          $this->addFailMessage("Position {$index}", $this->validator);
           return false;
         }
       }
@@ -23,4 +23,8 @@ class ArrayValidator extends ComplexValidatorAbstract
     return false;
   }
 
+  public function getErrorMessage():string
+  {
+    return "Should be an array";
+  }
 }

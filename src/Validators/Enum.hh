@@ -23,8 +23,9 @@ class Enum implements Validator
     return false;
   }
 
-  public function getFailures():Vector<string>
+  public function getErrorMessage():string
   {
-    return Vector{"Value is not allowed"};
+    return "Value should be in this list: ".
+      implode(', ', $this->enum->getMethod("getNames")->invoke(null));
   }
 }

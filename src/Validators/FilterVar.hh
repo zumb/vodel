@@ -18,8 +18,8 @@ class FilterVar implements Validator
     return false;
   }
 
-  public function getFailures():Vector<string>
+  public function getErrorMessage():string
   {
-    return Vector{"Invalid input for ".$this->flag};
+    return "Invalid input for flag ".$this->flag;
   }
 }
