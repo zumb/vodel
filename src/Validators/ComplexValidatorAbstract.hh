@@ -13,11 +13,11 @@ abstract class ComplexValidatorAbstract implements ComplexValidator
     return $this->failures;
   }
 
-  public function addFailMessage(string $name, Validator $validator):void
+  public function addFailMessage(string $name, ?Validator $validator):void
   {
     if($validator instanceof ComplexValidator) {
       $this->failures->add(Pair{$name, $validator->getFailures()});
-    } else {
+    } elseif($validator) {
       $this->failures->add(Pair{$name, $validator->getErrorMessage()});
     }
   }

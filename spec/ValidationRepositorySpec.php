@@ -7,36 +7,36 @@ use Prophecy\Argument;
 use Vodel\ValidationRepository;
 use Vodel\Interfaces\Validator;
 use Vodel\PropertyInspector;
-use Vodel\JsonModelAdapter;
 use Vodel\Validators;
 
 class ValidationRepositorySpec extends ObjectBehavior
 {
-  public function let($property, $class)
+  public function let($inspector, $class)
   {
-    $property->beADoubleOf(PropertyInspector::class);
+    $inspector->beADoubleOf(PropertyInspector::class);
     $class->beADoubleOf(\ReflectionClass::class);
+    $this->beConstructedWith($inspector);
   }
 
-  public function it_returns_validator_for_model($property, $class)
+  public function it_returns_validator_for_model($inspector, $class)
   {
-    $property->isModel()
+    $inspector->getReflectionClass("ModelClass")
+      ->willReturn($class);
+    $inspector->isModel("ModelClass")
       ->willReturn(true);
-    $property->getReflectionClass()
-      ->wilLReturn($class);
-    $this->getValidatorFor($property)
-      ->shouldBeAnInstanceOf(JsonModelAdapter::class);
+    $this->getValidatorFor("ModelClass")
+      ->shouldBeAnInstanceOf(Validators\Model::class);
   }
 
-  public function it_returns_validator_for_enum($property, $class)
+  public function it_returns_validator_for_enum($inspector, $class)
   {
-    $property->isModel()
+    $inspector->isModel("Enum")
       ->willReturn(false);
-    $property->isEnum()
+    $inspector->isEnum("Enum")
       ->willReturn(true);
-    $property->getReflectionClass()
-      ->wilLReturn($class);
-    $this->getValidatorFor($property)
+    $inspector->getReflectionClass("Enum")
+      ->willReturn($class);
+    $this->getValidatorFor("Enum")
       ->shouldBeAnInstanceOf(Validators\Enum::class);
   }
 }

@@ -21,9 +21,14 @@ class Model extends ComplexValidatorAbstract implements Validator
     if($jsonObject instanceof \stdClass) {
       $jsonReflection = new \ReflectionClass($jsonObject);
       foreach($this->model->getPropertiesToValidate() as $property) {
-        $property->setValue($jsonReflection, $jsonObject);
-        if(!$property->validate()) {
-          $this->failures->add(Pair{$property->getName(), $property->getFailure()});
+        try {
+          if(!$property->validate($property->extractValue($jsonReflection, $jsonObject))) {
+            $this->addFailMessage($property->getName(), $property->getValidator());
+          }
+        } catch(\ReflectionException $ex) {
+          if(!$property->isOptional()) {
+            $this->failures->add(Pair{$property->getName(), "Required"});
+          }
         }
       }
     }

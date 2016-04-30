@@ -7,8 +7,6 @@ use Vodel\Interfaces\ComplexValidator;
 
 class PropertyAdapter
 {
-  protected mixed $value;
-
   protected Vector<string> $failures = Vector {};
 
   public function __construct (
@@ -17,20 +15,18 @@ class PropertyAdapter
     public ?Validator $validator = null
   ) {}
 
-  public function setValue(\ReflectionClass $jsonReflection, \stdClass $jsonObject):void
+  public function extractValue(\ReflectionClass $jsonReflection, \stdClass $jsonObject):mixed
   {
-    try {
-      $this->value = $jsonReflection->getProperty($this->name)
-        ->getValue($jsonObject);
-    } catch (\ReflectionException $ex) {}
+    return $jsonReflection->getProperty($this->getName())
+      ->getValue($jsonObject);
   }
 
-  public function validate():bool
+  public function validate(mixed $value):bool
   {
-    if($this->value == null) {
+    if($value == null) {
       return $this->isOptional();
     }elseif($this->validator !== null) {
-      return $this->validator->validate($this->value);
+      return $this->validator->validate($value);
     }
     return true;
   }
@@ -40,15 +36,9 @@ class PropertyAdapter
     return strpos($this->type, '?') === 0;
   }
 
-  public function getFailure():mixed
+  public function getValidator():?Validator
   {
-    if($this->value == null && !$this->isOptional()) {
-      return "Required";
-    } elseif($this->validator instanceof ComplexValidator) {
-      return $this->validator->getFailures();
-    } elseif($this->validator) {
-      return $this->validator->getErrorMessage();
-    }
+    return $this->validator;
   }
 
   public function getName():string

@@ -1,4 +1,4 @@
-<?php
+<?hh //partial
 
 namespace spec\Vodel\Validators;
 
@@ -7,18 +7,18 @@ use Prophecy\Argument;
 
 class FilterVarSpec extends ObjectBehavior
 {
-  function let()
+  public function let()
   {
     $this->beConstructedWith(FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
   }
 
-  function it_validates_correct_value()
+  public function it_validates_correct_value()
   {
     $this->validate("192.161.1.1")
       ->shouldReturn(true);
   }
 
-  function it_validates_incorrect_value()
+  public function it_validates_incorrect_value()
   {
     $this->validate("192.161.1")
       ->shouldReturn(false);

@@ -1,4 +1,4 @@
-<?php
+<?hh //partial
 
 namespace spec\Vodel\Validators;
 
@@ -8,24 +8,24 @@ use Vodel\Interfaces\Validator;
 
 class ArrayValidatorSpec extends ObjectBehavior
 {
-  function let($validator)
+  public function let($validator)
   {
     $validator->beADoubleOf(Validator::class);
     $this->beConstructedWith($validator);
   }
 
-  function it_fails_if_one_fails($validator)
+  public function it_fails_if_one_fails($validator)
   {
+    $validator->getErrorMessage()
+      ->willReturn("Error");
     $validator->validate(Argument::any())
       ->shouldBeCalledTimes(1)
       ->willReturn(false);
-    $validator->getFailures()
-      ->willReturn(new \HH\Vector());
     $this->validate(["one", "two"])
       ->shouldReturn(false);
   }
 
-  function it_succeeds_if_all_succeeds($validator)
+  public function it_succeeds_if_all_succeeds($validator)
   {
     $validator->validate(Argument::any())
       ->shouldBeCalledTimes(2)
@@ -34,7 +34,7 @@ class ArrayValidatorSpec extends ObjectBehavior
       ->shouldReturn(true);
   }
 
-  function it_fails_if_input_not_array()
+  public function it_fails_if_input_not_array($validator)
   {
     $this->validate("text")
       ->shouldReturn(false);

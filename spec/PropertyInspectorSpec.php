@@ -13,39 +13,37 @@ class PropertyInspectorSpec extends ObjectBehavior
 {
   public function it_detects_vector()
   {
-    $this->beConstructedWith('HH\Vector<array<string>>');
-    $this->isVector()
+    $this->isVector('HH\Vector<array<string>>')
       ->shouldReturn(true);
   }
 
   public function it_extracts_type_from_vector()
   {
-    $this->beConstructedWith('HH\Vector<array<string>>');
-    $this->getVectorType()
+    $this->getVectorType('HH\Vector<array<string>>')
       ->shouldReturn('array<string>');
   }
 
   public function it_returns_type_for_nullable()
   {
-    $this->beConstructedWith('?HH\string');
-    $this->getBasicType()->shouldReturn('HH\string');
+    $this->getBasicType('?HH\string')
+      ->shouldReturn('HH\string');
   }
 
   public function it_returns_type_for_subtyped()
   {
-    $this->beConstructedWith('array<string>');
-    $this->getBasicType()->shouldReturn('array');
+    $this->getBasicType('array<string>')
+      ->shouldReturn('array');
   }
 
   public function it_detects_enum()
   {
-    $this->beConstructedWith('spec\Vodel\EnumTest');
-    $this->isEnum()->shouldReturn(true);
+    $this->isEnum('spec\Vodel\EnumTest')
+      ->shouldReturn(true);
   }
 
   public function it_detects_not_enum()
   {
-    $this->beConstructedWith('string');
-    $this->isEnum()->shouldReturn(false);
+    $this->isEnum('string')
+      ->shouldReturn(false);
   }
 }
