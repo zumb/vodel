@@ -3,7 +3,9 @@ language: php
 php:
   - hhvm
 
-install: composer update
+install:
+  - composer update
+  - echo 'xdebug.enable = 1' >> /etc/hhvm/server.ini;
 
 script:
   - hh_client
