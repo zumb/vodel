@@ -5,7 +5,7 @@ php:
 
 install:
   - composer update
-  - echo 'xdebug.enable = 1' >> /etc/hhvm/server.ini;
+  - echo 'xdebug.enable = 1' >> config.ini;
 
 script:
   - hh_client
