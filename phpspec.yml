@@ -2,6 +2,3 @@ suites:
     vodel_suite:
         namespace: Vodel
         psr4_prefix: Vodel
-
-extensions:
-    - PhpSpec\Extension\CodeCoverageExtension
