@@ -3,12 +3,12 @@
   "website": "http://web.com",
   "favoriteColors": ["blue", "green"],
   "name": "Ken",
-  
+  "birthDate": "1997-07-16T19:20:30+01:00",
   "role": "editor",
   "phones": [
       {
         "type": "home",
-        "number": "123456"
+        "number": 123456
       },
       {
         "type": "office",

@@ -4,19 +4,22 @@ namespace Vodel;
 use Vodel\Interfaces\Validator;
 use Vodel\Interfaces\JsonModel;
 use Vodel\Validators;
+use Vodel\Reflection\TypeInspector;
 
 class ValidationRepository
 {
   protected Map<string, Validator> $validators = Map{};
 
   public function __construct(
-    protected PropertyInspector $inspector
+    protected ClassUtil $classUtil,
+    protected TypeInspector $inspector
   ) {
-    $this->addValidator('Vodel\Email', new Validators\Email());
-    $this->addValidator('Vodel\Url', new Validators\Url());
+    $this->addValidator('Email', new Validators\Email());
+    $this->addValidator('Url', new Validators\Url());
     $this->addValidator('DateTime', new Validators\DateTime());
     $this->addValidator('HH\string', new Validators\Text());
-    $this->addValidator('HH\int', new Validators\Number());
+    $this->addValidator('HH\float', new Validators\Number());
+    $this->addValidator('HH\int', new Validators\IntegerNumber());
   }
 
   public function addValidator(string $target, Validator $validator):this
@@ -25,35 +28,33 @@ class ValidationRepository
     return $this;
   }
 
-  public function getValidatorFor(string $typeText):?Validator
-  {
-    if($this->inspector->isModel($typeText)) {
-      return new Validators\Model(
-        new JsonModelAdapter($this, $this->inspector->getReflectionClass($typeText))
-      );
-    } elseif($this->inspector->isEnum($typeText)) {
-      return new Validators\Enum($this->inspector->getReflectionClass($typeText));
-    } elseif($this->inspector->isVector($typeText)) {
-        $validator = $this->getValidatorFor($this->inspector->getVectorType($typeText));
-        if($validator) {
-          return new Validators\ArrayValidator($validator);
-        }
-    } else {
-      return $this->getValidatorForClass($this->inspector->getBasicType($typeText));
-    }
-    return null;
-  }
-
   public function getValidatorForClass(string $class):?Validator
   {
     if($this->validators->get($class)) {
       return $this->validators->get($class);
-    } elseif($this->inspector->classExists($class)) {
+    } elseif($this->classUtil->classExists($class)) {
       foreach($this->validators as $classTarget => $validator) {
-        if($this->inspector->isSubclass($class, $classTarget)) {
+        if($this->classUtil->isSubclass($class, $classTarget)) {
           return $validator;
         }
       }
+    }
+    return null;
+  }
+
+  public function getValidatorFor(string $type):?Validator
+  {
+    if($this->inspector->isModel($type)) {
+      return new Adapters\ModelAdapter($this, $this->classUtil->getReflection($type));
+    } elseif($this->inspector->isEnum($type)) {
+      return new Validators\Enum($this->classUtil->getReflection($type));
+    } elseif($this->inspector->isVector($type)) {
+        $validator = $this->getValidatorFor($this->inspector->getSubType($type));
+        if($validator) {
+          return new Adapters\VectorAdapter($validator);
+        }
+    } else {
+      return $this->getValidatorForClass($this->inspector->getBasicType($type));
     }
     return null;
   }

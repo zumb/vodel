@@ -9,7 +9,7 @@ class NumberSpec extends ObjectBehavior
 {
   public function it_validates_correct_value()
   {
-    $this->validate(123)
+    $this->validate(123.00)
       ->shouldReturn(true);
   }
 

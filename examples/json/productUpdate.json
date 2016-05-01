@@ -1,0 +1,12 @@
+{
+  "name": "Special Computer",
+  "description": "Some computer",
+  "versions": [
+    "Black",
+    "White"
+  ],
+  "comments": [{
+    "name": "Jonh",
+    "text": "Excelent computer"
+    }]
+}

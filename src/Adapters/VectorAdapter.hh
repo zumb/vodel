@@ -1,9 +1,13 @@
 <?hh //strict
-namespace Vodel\Validators;
+namespace Vodel\Adapters;
 
 use Vodel\Interfaces\Validator;
+use Vodel\Interfaces\Adapter;
+use Vodel\Interfaces\TransformsData;
 
-class ArrayValidator extends ComplexValidatorAbstract implements Validator
+class VectorAdapter extends AdapterAbstract implements
+  Validator,
+  TransformsData<array<mixed>, Vector<mixed>>
 {
   public function __construct(
     protected Validator $validator
@@ -26,5 +30,18 @@ class ArrayValidator extends ComplexValidatorAbstract implements Validator
   public function getErrorMessage():string
   {
     return "Should be an array";
+  }
+
+  public function transform(array<mixed> $input):Vector<mixed>
+  {
+    $vector = Vector{};
+    foreach($input as $item) {
+      if($this->validator instanceof TransformsData) {
+        $vector->add($this->validator->transform($item));
+      } else {
+        $vector->add($item);
+      }
+    }
+    return $vector;
   }
 }

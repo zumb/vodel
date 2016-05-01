@@ -1,10 +1,9 @@
 <?hh //strict
-namespace Vodel\Validators;
+namespace Vodel\Adapters;
 
-use Vodel\Interfaces\ComplexValidator;
 use Vodel\Interfaces\Validator;
 
-abstract class ComplexValidatorAbstract implements ComplexValidator
+abstract class AdapterAbstract implements Validator
 {
   protected Map<string, mixed> $failures = Map {};
 
@@ -15,7 +14,7 @@ abstract class ComplexValidatorAbstract implements ComplexValidator
 
   public function addFailMessage(string $name, ?Validator $validator):void
   {
-    if($validator instanceof ComplexValidator) {
+    if($validator instanceof AdapterAbstract) {
       $this->failures->add(Pair{$name, $validator->getFailures()});
     } elseif($validator) {
       $this->failures->add(Pair{$name, $validator->getErrorMessage()});

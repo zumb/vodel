@@ -1,15 +1,17 @@
 <?hh //partial
 namespace MyProject;
 
+require_once 'vendor/autoload.php';
+
 use Vodel\Interfaces\JsonModel;
 use Vodel\Validators;
-
-require_once 'vendor/autoload.php';
 
 /* Vodel relies on type hints for matching validation rules,
  * you can define custom types to apply custom validation rules
  */
 type Color = string;
+type Email = string;
+type Url = string;
 
 /* You can also simply define an enum, for a simple value must match
  * validation */
@@ -23,28 +25,27 @@ enum Role: string {
 class UserModel implements JsonModel
 {
   /* Here we set the properties in the constructor, so they will need to
-   be defined */
+   be defined on create (check the CreateOrUpdate example) */
   public function __construct(
-    /* Vodel also includes some common types you can use, like Email */
-    public \Vodel\Email $email,
+    /* Vodel includes some common types you can use, like Email */
+    public Email $email,
 
     /* Or Url */
-    public \Vodel\Url $website,
+    public Url $website,
 
     /* Here we use our custom type Color, that is a string, but inside an array
     that means that the user can send an array of values, and each of them
     will have to pass the validation associated with the Color type */
     public Vector<Color> $favoriteColors,
 
-    /* As simple validation will check for the scalar type */
+    /* A simple validation will check for the scalar type */
     public string $name,
-
-    /* To define an optional value, just make it nullable */
-    public ?string $lastName,
 
     /* Here we use our enum type, the user will have to send a valid value */
     public Role $role,
 
+    /* Vodel includes validation for DateTimes, you can basically associate
+    any class with a custom validator and data transformer  */
     public \DateTime $birthDate,
 
     /* Relate another JsonModel object as property or vector, it will
@@ -53,9 +54,12 @@ class UserModel implements JsonModel
     */
     public Vector<PhoneModel> $phones,
 
-    /* Protected properties don't count */
-    protected ?string $description
+    /* To define an optional value, just assign a value to it */
+    public ?string $lastName = null
   ) {}
+
+  /* Protected properties don't count */
+  protected ?string $description;
 
   /* Unless you write a setter method for them */
   public function setDescription(string $value):void
@@ -91,17 +95,16 @@ class ColorValidator extends Validators\InArray<string>
  */
 function main ():void {
   // Create the validation repository
-  $validations = new \Vodel\ValidationRepository(new \Vodel\PropertyInspector());
+  $validations = new \Vodel\ValidationRepository(new \Vodel\ClassUtil(), new \Vodel\Reflection\TypeInspector());
   // Add custom validations
   $validations->addValidator('MyProject\Color', new ColorValidator());
-  $validator = new \Vodel\Validators\Model(
-    new \Vodel\JsonModelAdapter($validations, new \ReflectionClass(UserModel::class))
-  );
+  $adapter = new \Vodel\Adapters\ModelAdapter($validations, new \ReflectionClass(UserModel::class));
   // We will take the input from a file, it should come from the request
-  if($validator->validate(json_decode(file_get_contents(__DIR__."/example.json")))) {
+  if($adapter->validate(json_decode(file_get_contents(__DIR__."/json/validations.json")))) {
     echo "The input is valid";
+    var_dump($adapter->transform(null));
   } else {
-    var_dump(json_encode($validator->getFailures()));
+    var_dump(json_encode($adapter->getFailures()));
   }
 }
 

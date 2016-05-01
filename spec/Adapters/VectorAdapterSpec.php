@@ -1,12 +1,12 @@
 <?hh //partial
 
-namespace spec\Vodel\Validators;
+namespace spec\Vodel\Adapters;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Vodel\Interfaces\Validator;
 
-class ArrayValidatorSpec extends ObjectBehavior
+class VectorAdapterSpec extends ObjectBehavior
 {
   public function let($validator)
   {
