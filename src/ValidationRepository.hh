@@ -5,6 +5,7 @@ use Zumb\Vodel\Interfaces\Validator;
 use Zumb\Vodel\Interfaces\JsonModel;
 use Zumb\Vodel\Validators;
 use Zumb\Vodel\Reflection\TypeInspector;
+use Zumb\Vodel\Reflection\ClassAnalyzer;
 
 class ValidationRepository
 {
@@ -45,7 +46,7 @@ class ValidationRepository
   public function getValidatorFor(string $type):?Validator
   {
     if($this->inspector->isModel($type)) {
-      return new Adapters\ModelAdapter($this, $this->classUtil->getReflection($type));
+      return new Adapters\ModelAdapter(new ClassAnalyzer($this, $this->classUtil->getReflection($type)));
     } elseif($this->inspector->isEnum($type)) {
       return new Validators\Enum($this->classUtil->getReflection($type));
     } elseif($this->inspector->isVector($type)) {

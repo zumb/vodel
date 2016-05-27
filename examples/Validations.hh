@@ -98,11 +98,12 @@ function main ():void {
   $validations = new \Zumb\Vodel\ValidationRepository(new \Zumb\Vodel\ClassUtil(), new \Zumb\Vodel\Reflection\TypeInspector());
   // Add custom validations
   $validations->addValidator('MyProject\Color', new ColorValidator());
-  $adapter = new \Zumb\Vodel\Adapters\ModelAdapter($validations, new \ReflectionClass(UserModel::class));
+  $class = new \Zumb\Vodel\Reflection\ClassAnalyzer($validations, new \ReflectionClass(UserModel::class));
+  $adapter = new \Zumb\Vodel\Adapters\ModelAdapter($class);
   // We will take the input from a file, it should come from the request
   if($adapter->validate(json_decode(file_get_contents(__DIR__."/json/validations.json")))) {
     echo "The input is valid";
-    var_dump($adapter->transform(null));
+    var_dump($class->transform(null));
   } else {
     var_dump(json_encode($adapter->getFailures()));
   }

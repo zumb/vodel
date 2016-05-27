@@ -47,22 +47,24 @@ function main ():void {
   // Create the validation repository
   $validations = new \Zumb\Vodel\ValidationRepository(new \Zumb\Vodel\ClassUtil(), new \Zumb\Vodel\Reflection\TypeInspector());
   // Create adapter without object, so it will create one and use constructor validations
-  $adapter = new \Zumb\Vodel\Adapters\ModelAdapter($validations, new \ReflectionClass(ProductModel::class));
+  $class = new \Zumb\Vodel\Reflection\ClassAnalyzer($validations, new \ReflectionClass(ProductModel::class));
+  $adapter = new \Zumb\Vodel\Adapters\ModelAdapter($class);
   // We will take the input from a file, it should come from the request
   if($adapter->validate(json_decode(file_get_contents(__DIR__."/json/productCreate.json")))) {
     echo "The input is valid";
-    var_dump($adapter->transform(null));
+    var_dump($class->transform(null));
   } else {
     var_dump(json_encode($adapter->getFailures()));
   }
 
   // Create adapter with an object, so it will create one and use constructor validations
   $productFromDB = new ProductModel("Electronics", "Computer", 1500.50);
-  $adapter = new \Zumb\Vodel\Adapters\ModelAdapter($validations, new \ReflectionClass($productFromDB), $productFromDB);
+  $class = new \Zumb\Vodel\Reflection\ClassAnalyzer($validations, new \ReflectionClass($productFromDB), $productFromDB);
+  $adapter = new \Zumb\Vodel\Adapters\ModelAdapter($class);
   // We will take the input from a file, it should come from the request
   if($adapter->validate(json_decode(file_get_contents(__DIR__."/json/productUpdate.json")))) {
     echo "The input is valid";
-    var_dump($adapter->transform(null));
+    var_dump($class->transform(null));
   } else {
     var_dump(json_encode($adapter->getFailures()));
   }
