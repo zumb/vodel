@@ -1,16 +1,16 @@
 <?hh //strict
-namespace Vodel\Adapters;
+namespace Zumb\Vodel\Adapters;
 
-use Vodel\Interfaces\JsonModel;
-use Vodel\Interfaces\Validator;
-use Vodel\PropertyInspector;
-use Vodel\Interfaces\InputParameter;
-use Vodel\ValidationRepository;
-use Vodel\Input\ConstructorParameter;
-use Vodel\Input\SetterMethod;
-use Vodel\Input\PublicProperty;
-use Vodel\Reflection\HackProperty;
-use Vodel\Interfaces\TransformsData;
+use Zumb\Vodel\Interfaces\JsonModel;
+use Zumb\Vodel\Interfaces\Validator;
+use Zumb\Vodel\PropertyInspector;
+use Zumb\Vodel\Interfaces\InputParameter;
+use Zumb\Vodel\ValidationRepository;
+use Zumb\Vodel\Input\ConstructorParameter;
+use Zumb\Vodel\Input\SetterMethod;
+use Zumb\Vodel\Input\PublicProperty;
+use Zumb\Vodel\Reflection\HackProperty;
+use Zumb\Vodel\Interfaces\TransformsData;
 
 class ModelAdapter extends AdapterAbstract implements
   TransformsData<mixed, JsonModel>
@@ -66,6 +66,8 @@ class ModelAdapter extends AdapterAbstract implements
           }
         }
       }
+    } else {
+      return false;
     }
     return $this->failures->count() == 0;
   }

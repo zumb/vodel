@@ -1,7 +1,7 @@
 <?hh //strict
-namespace Vodel\Input;
+namespace Zumb\Vodel\Input;
 
-use Vodel\Interfaces\Validator;
+use Zumb\Vodel\Interfaces\Validator;
 
 class ConstructorParameter extends InputParameterAbstract
 {

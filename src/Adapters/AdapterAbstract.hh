@@ -1,7 +1,7 @@
 <?hh //strict
-namespace Vodel\Adapters;
+namespace Zumb\Vodel\Adapters;
 
-use Vodel\Interfaces\Validator;
+use Zumb\Vodel\Interfaces\Validator;
 
 abstract class AdapterAbstract implements Validator
 {

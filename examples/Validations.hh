@@ -3,8 +3,8 @@ namespace MyProject;
 
 require_once 'vendor/autoload.php';
 
-use Vodel\Interfaces\JsonModel;
-use Vodel\Validators;
+use Zumb\Vodel\Interfaces\JsonModel;
+use Zumb\Vodel\Validators;
 
 /* Vodel relies on type hints for matching validation rules,
  * you can define custom types to apply custom validation rules
@@ -95,10 +95,10 @@ class ColorValidator extends Validators\InArray<string>
  */
 function main ():void {
   // Create the validation repository
-  $validations = new \Vodel\ValidationRepository(new \Vodel\ClassUtil(), new \Vodel\Reflection\TypeInspector());
+  $validations = new \Zumb\Vodel\ValidationRepository(new \Zumb\Vodel\ClassUtil(), new \Zumb\Vodel\Reflection\TypeInspector());
   // Add custom validations
   $validations->addValidator('MyProject\Color', new ColorValidator());
-  $adapter = new \Vodel\Adapters\ModelAdapter($validations, new \ReflectionClass(UserModel::class));
+  $adapter = new \Zumb\Vodel\Adapters\ModelAdapter($validations, new \ReflectionClass(UserModel::class));
   // We will take the input from a file, it should come from the request
   if($adapter->validate(json_decode(file_get_contents(__DIR__."/json/validations.json")))) {
     echo "The input is valid";

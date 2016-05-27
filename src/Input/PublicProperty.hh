@@ -1,9 +1,9 @@
 <?hh //strict
-namespace Vodel\Input;
+namespace Zumb\Vodel\Input;
 
-use Vodel\Interfaces\Validator;
-use Vodel\Reflection\HackProperty;
-use Vodel\Interfaces\JsonModel;
+use Zumb\Vodel\Interfaces\Validator;
+use Zumb\Vodel\Reflection\HackProperty;
+use Zumb\Vodel\Interfaces\JsonModel;
 
 class PublicProperty extends InputParameterAbstract
 {

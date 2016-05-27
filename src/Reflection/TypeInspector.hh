@@ -1,7 +1,7 @@
 <?hh //strict
-namespace Vodel\Reflection;
+namespace Zumb\Vodel\Reflection;
 
-use Vodel\Interfaces\JsonModel;
+use Zumb\Vodel\Interfaces\JsonModel;
 
 class TypeInspector
 {

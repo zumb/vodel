@@ -1,6 +1,6 @@
 <?hh //partial
 
-namespace spec\Vodel\Reflection;
+namespace spec\Zumb\Vodel\Reflection;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
@@ -33,7 +33,7 @@ class TypeInspectorSpec extends ObjectBehavior
 
   public function it_detects_enum()
   {
-    $this->isEnum('spec\Vodel\Reflection\TestEnum')
+    $this->isEnum('spec\Zumb\Vodel\Reflection\TestEnum')
       ->shouldReturn(true);
     $this->isEnum('HH\string')
       ->shouldReturn(false);

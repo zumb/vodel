@@ -1,7 +1,7 @@
 <?hh //strict
-namespace Vodel\Validators;
+namespace Zumb\Vodel\Validators;
 
-use Vodel\Interfaces\Validator;
+use Zumb\Vodel\Interfaces\Validator;
 
 class FilterVar implements Validator
 {

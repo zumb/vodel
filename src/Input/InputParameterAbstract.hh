@@ -1,9 +1,9 @@
 <?hh // strict
-namespace Vodel\Input;
+namespace Zumb\Vodel\Input;
 
-use Vodel\Interfaces\InputParameter;
-use Vodel\Interfaces\Validator;
-use Vodel\Interfaces\TransformsData;
+use Zumb\Vodel\Interfaces\InputParameter;
+use Zumb\Vodel\Interfaces\Validator;
+use Zumb\Vodel\Interfaces\TransformsData;
 
 abstract class InputParameterAbstract implements InputParameter
 {

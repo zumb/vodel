@@ -1,4 +1,4 @@
 suites:
     vodel_suite:
-        namespace: Vodel
-        psr4_prefix: Vodel
+        namespace: Zumb\Vodel
+        psr4_prefix: Zumb\Vodel

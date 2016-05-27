@@ -1,6 +1,6 @@
 <?hh //partial
 
-namespace spec\Vodel\Validators;
+namespace spec\Zumb\Vodel\Validators;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;

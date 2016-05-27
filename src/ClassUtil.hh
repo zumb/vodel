@@ -1,9 +1,8 @@
 <?hh //strict
-namespace Vodel;
+namespace Zumb\Vodel;
 
-class ClassUtil {
-
-
+class ClassUtil
+{
 
   public function isSubclass(string $child, string $parent):bool
   {

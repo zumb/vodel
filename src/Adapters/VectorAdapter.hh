@@ -1,9 +1,9 @@
 <?hh //strict
-namespace Vodel\Adapters;
+namespace Zumb\Vodel\Adapters;
 
-use Vodel\Interfaces\Validator;
-use Vodel\Interfaces\Adapter;
-use Vodel\Interfaces\TransformsData;
+use Zumb\Vodel\Interfaces\Validator;
+use Zumb\Vodel\Interfaces\Adapter;
+use Zumb\Vodel\Interfaces\TransformsData;
 
 class VectorAdapter extends AdapterAbstract implements
   Validator,

@@ -1,15 +1,15 @@
 <?hh //partial
 
-namespace spec\Vodel;
+namespace spec\Zumb\Vodel;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
-use Vodel\ValidationRepository;
-use Vodel\Interfaces\Validator;
-use Vodel\Reflection\TypeInspector;
-use Vodel\Validators;
-use Vodel\ClassUtil;
-use Vodel\Adapters;
+use Zumb\Vodel\ValidationRepository;
+use Zumb\Vodel\Interfaces\Validator;
+use Zumb\Vodel\Reflection\TypeInspector;
+use Zumb\Vodel\Validators;
+use Zumb\Vodel\ClassUtil;
+use Zumb\Vodel\Adapters;
 
 class ValidationRepositorySpec extends ObjectBehavior
 {

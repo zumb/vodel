@@ -1,5 +1,5 @@
 <?hh //strict
-namespace Vodel\Reflection;
+namespace Zumb\Vodel\Reflection;
 
 class HackProperty
 {

@@ -1,5 +1,5 @@
 <?hh //strict
-namespace Vodel\Interfaces;
+namespace Zumb\Vodel\Interfaces;
 
 interface Adapter extends Validator
 {

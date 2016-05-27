@@ -1,8 +1,8 @@
 <?hh //strict
-namespace Vodel\Validators;
+namespace Zumb\Vodel\Validators;
 
-use Vodel\Interfaces\Validator;
-use Vodel\Interfaces\TransformsData;
+use Zumb\Vodel\Interfaces\Validator;
+use Zumb\Vodel\Interfaces\TransformsData;
 
 class DateTime implements Validator, TransformsData<string, \DateTime>
 {

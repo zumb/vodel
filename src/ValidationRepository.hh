@@ -1,10 +1,10 @@
 <?hh //strict
-namespace Vodel;
+namespace Zumb\Vodel;
 
-use Vodel\Interfaces\Validator;
-use Vodel\Interfaces\JsonModel;
-use Vodel\Validators;
-use Vodel\Reflection\TypeInspector;
+use Zumb\Vodel\Interfaces\Validator;
+use Zumb\Vodel\Interfaces\JsonModel;
+use Zumb\Vodel\Validators;
+use Zumb\Vodel\Reflection\TypeInspector;
 
 class ValidationRepository
 {

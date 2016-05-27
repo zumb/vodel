@@ -1,10 +1,10 @@
 <?hh //partial
 
-namespace spec\Vodel\Adapters;
+namespace spec\Zumb\Vodel\Adapters;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
-use Vodel\Interfaces\Validator;
+use Zumb\Vodel\Interfaces\Validator;
 
 class VectorAdapterSpec extends ObjectBehavior
 {
